@@ -12,9 +12,9 @@ app = Flask(__name__)
 #english_bot.set_trainer(ChatterBotCorpusTrainer)
 #english_bot.train("chatterbot.corpus.english")
 
-deepThought = ChatBot("deepThought")
-deepThought.set_trainer(ChatterBotCorpusTrainer)
-deepThought.train("chatterbot.corpus.chinese")
+chatDroid = ChatBot("chatDroid")
+chatDroid.set_trainer(ChatterBotCorpusTrainer)
+chatDroid.train("chatterbot.corpus.chinese")
 
 list = []
 file = open('train_datas.txt')
@@ -23,8 +23,8 @@ try:
 		list.append(line.strip('\n'))
 finally:
 	file.close()
-deepThought.set_trainer(ListTrainer)
-deepThought.train(list)
+chatDroid.set_trainer(ListTrainer)
+chatDroid.train(list)
 
 
 @app.route("/")
@@ -34,6 +34,16 @@ def home():
 @app.route("/get/<string:query>")
 def get_raw_response(query):
 	return str(deepThought.get_response(query).text)
+
+@app.route("/chat/", methods=['GET', 'POST'])
+def get_response(query):
+	if request.method == 'POST':
+		input = request.args.get('input')
+		ans = str(chatDroid.get_response(input).text)
+		dict1 = json.loads(ans)
+		return json.dumps(dict1["resp"])
+	else:
+		return '<h1>只接受post请求！</h1>'
 
 
 if __name__ == "__main__":
