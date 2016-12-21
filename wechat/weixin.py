@@ -25,6 +25,8 @@ from lxml import html
 import mimetypes
 from requests_toolbelt.multipart.encoder import MultipartEncoder
 
+reload(sys)
+sys.setdefaultencoding('utf8')
 
 def catchKeyboardInterrupt(fn):
     def wrapper(*args):
