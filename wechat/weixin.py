@@ -1095,7 +1095,9 @@ class WebWeixin(object):
         return ''
 		
     def _chatdroid(self, word):
-        return "未实现"
+        info = {'input': word}
+        r = requests.post("http://127.0.0.1:5000/chat", data=info)
+        return r.text
 
     def _xiaodoubi(self, word):
         url = 'http://www.xiaodoubi.com/bot/chat.php'

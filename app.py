@@ -2,7 +2,11 @@
 from __future__ import unicode_literals
 import sys;reload(sys);sys.setdefaultencoding('utf8')
 
+import json
 from flask import Flask, render_template
+from flask import request
+from flask import redirect
+from flask import jsonify
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer, ListTrainer
 
@@ -33,18 +37,13 @@ def home():
 
 @app.route("/get/<string:query>")
 def get_raw_response(query):
-	return str(deepThought.get_response(query).text)
+	return str(chatDroid.get_response(query).text)
 
-@app.route("/chat/", methods=['GET', 'POST'])
-def get_response(query):
-	if request.method == 'POST':
-		input = request.args.get('input')
-		ans = str(chatDroid.get_response(input).text)
-		dict1 = json.loads(ans)
-		return json.dumps(dict1["resp"])
-	else:
-		return '<h1>只接受post请求！</h1>'
-
+@app.route('/chat', methods=['POST'])
+def register():
+	print request.headers
+	print request.form['input']
+	return str(chatDroid.get_response(request.form['input']).text)
 
 if __name__ == "__main__":
 	app.run()
